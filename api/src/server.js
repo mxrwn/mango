@@ -15,4 +15,12 @@ app.get('/', (req, res) => {
 
 })
 
+app.get('/api', (req, res) => {
+
+  res.json({
+    message : 'Welcome to the mongo API !'
+  })
+
+})
+
 module.exports = app
