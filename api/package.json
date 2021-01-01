@@ -21,7 +21,6 @@
   },
   "homepage": "https://github.com/mxrwn/mango#readme",
   "dependencies": {
-    "cors": "^2.8.5",
     "express": "^4.17.1",
     "helmet": "^4.3.1",
     "jest": "^26.6.3",
