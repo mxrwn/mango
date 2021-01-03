@@ -1,6 +1,7 @@
 const puppeteer = require('puppeteer')
 const $ = require('cheerio')
 const Manga = require('./../models/Manga')
+const Category = require('./../models/Category')
 const {v5} = require('uuid')
 const GetMangasFromScanTrad = async() => {
 
@@ -19,12 +20,19 @@ const GetMangasFromScanTrad = async() => {
   const result = []
   content.forEach(manga => {
     console.log(manga)
+    let categoryObj = {
+      type : $('.hm-right .hmr-date', manga).text(),
+      related_id : v5()
+    }
+    const category = new Category(categoryObj)
+    category.save()
      let total = $('.hm-left .hm-info .hmi-sub', manga).text()
      total = Number(total.substring(total.lastIndexOf(' ') + 1))
     let obj = {
       title : $('.hm-left .hm-info .hmi-titre', manga).text(),
       image : $('.hm-left .hm-image img', manga).attr('src'),
       url : `https://scantrad.net${$(this, manga).attr('href')}`,
+      category : categoryObj.related_id,
       total,
       scantrad : true
     }
@@ -36,8 +44,7 @@ const GetMangasFromScanTrad = async() => {
         let mangadoc = new Manga(manga)
         mangadoc.save()
       }else{
-        Manga.updateOne({title: manga.title, image: manga.image}, manga, (err, docu) => {
-        })
+        Manga.updateOne({title: manga.title, image: manga.image}, manga)
       }
     })
     
