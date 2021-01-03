@@ -1,0 +1,24 @@
+version : "3.9"
+
+services:
+  api:
+    container_name: api
+    build: ./api
+    environment: 
+      MONGO_CONNECTION : test
+
+    ports:
+      - 5000:5000
+    volumes:
+      - ./api/src:/usr/app/api/src
+  
+  db:
+    container_name: database
+    image: mongo
+    restart: always
+    environment: 
+      MONGO_PASSWORD: example
+      MONGO_USER: example
+      MONGO_DB: development
+    ports:
+     - 27017:27017
