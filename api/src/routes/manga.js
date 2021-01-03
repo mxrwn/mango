@@ -21,6 +21,7 @@ router.get('/', (req, res) => {
 
 router.post('/', (req, res) => {
   if (req.body){
+    req.body.scantrad = false
     const data = new Manga(req.body)
     data.save()
     res.statusCode = 200

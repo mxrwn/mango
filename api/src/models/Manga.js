@@ -4,7 +4,9 @@ const {Schema} = mongoose
 const MangaSchema = new Schema({
   title: String,
   image: String,
-  uri: String
+  total: Number,
+  url: String,
+  scantrad : Boolean
 })
 
 const Manga = mongoose.model('manga', MangaSchema)
