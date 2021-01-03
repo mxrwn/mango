@@ -48,8 +48,11 @@ router.put('/', (req, res) => {
 })
 
 router.delete('/', (req, res) => {
-  res.json({
-    message : 'DELETE'
+  Manga.deleteOne({id : req.body._id}, (err) => {
+    if(err) return
+    res.json({
+      message : 'DELETED'
+    })
   })
 })
 
