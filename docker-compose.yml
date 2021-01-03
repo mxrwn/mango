@@ -20,5 +20,6 @@ services:
       MONGO_PASSWORD: example
       MONGO_USER: example
       MONGO_DB: development
+      MONGO_DB: example
     ports:
      - 27017:27017
