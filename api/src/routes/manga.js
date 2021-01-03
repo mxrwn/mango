@@ -37,8 +37,12 @@ router.post('/', (req, res) => {
 
 
 router.put('/', (req, res) => {
-  res.json({
-    message : 'PUT'
+  Manga.updateOne({id : req.body._id}, req.body, (err, doc) => {
+    if(err) return
+    res.json({
+      message : 'UPDATED'
+    }
+    )
   })
 })
 
