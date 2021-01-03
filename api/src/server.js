@@ -12,16 +12,16 @@ const manga = require('./routes/manga')
 // Use of Middlewares
 app.use(morgan('dev'))
 .use(helmet())
+.use(express.json())
 
 
 // Connect to database
-mongoose.connect('mongodb://192.168.1.47:27017/photo-challenge', {
+mongoose.connect('mongodb://localhost:27017/mango', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useCreateIndex: true,
   useFindAndModify: false
 }, (err) => {
-  console.log(err);
   console.log('Connected to database ✔');
 })
 
@@ -32,31 +32,5 @@ app.get('/', (req, res) => {
 })
 
 app.use('/manga', manga)
-
-
-const express = require('express')
-const morgan = require('morgan')
-const helmet = require('helmet')
-
-const app = express()
-
-app.use(morgan('dev'))
-.use(helmet())
-
-app.get('/', (req, res) => {
-
-  res.json({
-    message : 'Welcome to the mongo API !'
-  })
-
-})
-
-app.get('/api', (req, res) => {
-
-  res.json({
-    message : 'Welcome to the mongo API !'
-  })
-
-})
 
 module.exports = app
