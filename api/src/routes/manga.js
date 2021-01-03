@@ -21,6 +21,7 @@ router.get('/', (req, res) => {
 
 router.post('/', (req, res) => {
   if (req.body){
+    req.body.scantrad = false
     const data = new Manga(req.body)
     data.save()
     res.statusCode = 200
@@ -37,14 +38,21 @@ router.post('/', (req, res) => {
 
 
 router.put('/', (req, res) => {
-  res.json({
-    message : 'PUT'
+  Manga.updateOne({id : req.body._id}, req.body, (err, doc) => {
+    if(err) return
+    res.json({
+      message : 'UPDATED'
+    }
+    )
   })
 })
 
 router.delete('/', (req, res) => {
-  res.json({
-    message : 'DELETE'
+  Manga.deleteOne({id : req.body._id}, (err) => {
+    if(err) return
+    res.json({
+      message : 'DELETED'
+    })
   })
 })
 
