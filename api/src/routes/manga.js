@@ -20,15 +20,29 @@ router.get('/', (req, res) => {
 })
 
 router.post('/', (req, res) => {
-  res.json({
-    message : 'POST'
-  })
+  if (req.body){
+    const data = new Manga(req.body)
+    data.save()
+    res.statusCode = 200
+    res.json({
+      message : 'POSTED'
+    })
+  }else{
+    res.statusCode = 401
+    res.json({
+      message : 'NOTHING SENDED'
+    })
+  }
 })
 
 
 router.put('/', (req, res) => {
-  res.json({
-    message : 'PUT'
+  Manga.updateOne({id : req.body._id}, req.body, (err, doc) => {
+    if(err) return
+    res.json({
+      message : 'UPDATED'
+    }
+    )
   })
 })
 
