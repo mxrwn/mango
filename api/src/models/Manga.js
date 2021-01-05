@@ -6,7 +6,8 @@ const MangaSchema = new Schema({
   image: String,
   total: Number,
   url: String,
-  scantrad : Boolean
+  scantrad : Boolean,
+  category : String
 })
 
 const Manga = mongoose.model('manga', MangaSchema)
