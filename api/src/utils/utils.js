@@ -1,7 +1,8 @@
 const puppeteer = require('puppeteer')
 const $ = require('cheerio')
 const Manga = require('./../models/Manga')
-const {v5} = require('uuid')
+const Category = require('./../models/Category')
+const {v4: uuidv4 } = require('uuid')
 const GetMangasFromScanTrad = async() => {
 
   const browser = await puppeteer.launch()
@@ -18,7 +19,12 @@ const GetMangasFromScanTrad = async() => {
   })
   const result = []
   content.forEach(manga => {
-    console.log(manga)
+    // let categoryObj = {
+    //   type : $('.hm-right .hmr-date', manga).text(),
+    //   related_id : uuidv4()
+    // }
+    // const category = new Category(categoryObj)
+    // category.save()
      let total = $('.hm-left .hm-info .hmi-sub', manga).text()
      total = Number(total.substring(total.lastIndexOf(' ') + 1))
     let obj = {
@@ -32,16 +38,18 @@ const GetMangasFromScanTrad = async() => {
   })
   result.forEach(manga => {
     Manga.find({title: manga.title, image: manga.image}, (err , doc) => {
-      if(doc === null || doc.length === 0){
+      console.log(doc);
+      if(doc === null || doc.length == 0){
+        
         let mangadoc = new Manga(manga)
         mangadoc.save()
       }else{
-        Manga.updateOne({title: manga.title, image: manga.image}, manga, (err, docu) => {
-        })
+        Manga.updateOne({title: manga.title, image: manga.image}, manga)
       }
     })
     
   })
+  return 200
 }
 
 module.exports = {
