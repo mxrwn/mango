@@ -49,6 +49,7 @@ const GetMangasFromScanTrad = async() => {
     })
     
   })
+  return 200
 }
 
 module.exports = {
