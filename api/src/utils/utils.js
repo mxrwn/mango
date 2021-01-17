@@ -3,6 +3,7 @@ const $ = require('cheerio')
 const Manga = require('./../models/Manga')
 const Category = require('./../models/Category')
 const {v4: uuidv4 } = require('uuid')
+const _ = require('lodash')
 const GetMangasFromScanTrad = async() => {
 
   const browser = await puppeteer.launch()
@@ -18,13 +19,15 @@ const GetMangasFromScanTrad = async() => {
     return mangasArray
   })
   const result = []
+  categoryArray = [];
   content.forEach(manga => {
-    // let categoryObj = {
-    //   type : $('.hm-right .hmr-date', manga).text(),
-    //   related_id : uuidv4()
-    // }
-    // const category = new Category(categoryObj)
-    // category.save()
+    
+    let categoryObj = {
+      type : $('.hm-right .hmr-date', manga).text(),
+    }
+    categoryArray.push(categoryObj)
+    categoryArray = _.uniqBy(categoryArray, 'type')
+   console.log(categoryArray);
      let total = $('.hm-left .hm-info .hmi-sub', manga).text()
      total = Number(total.substring(total.lastIndexOf(' ') + 1))
     let obj = {
@@ -32,13 +35,24 @@ const GetMangasFromScanTrad = async() => {
       image : $('.hm-left .hm-image img', manga).attr('src'),
       url : `https://scantrad.net${$(this, manga).attr('href')}`,
       total,
-      scantrad : true
+      scantrad : true,
+      category: categoryObj.type
     }
     result.push(obj)
   })
+  categoryArray.forEach(category => {
+    Category.find({type : category.type}, (err , doc) => {
+      if(doc === null || doc.length == 0){
+        
+        let categorydoc = new Category(category)
+        categorydoc.save()
+      }else{
+        Category.updateOne({type: category.type}, category)
+      }
+    })
+  })
   result.forEach(manga => {
     Manga.find({title: manga.title, image: manga.image}, (err , doc) => {
-      console.log(doc);
       if(doc === null || doc.length == 0){
         
         let mangadoc = new Manga(manga)

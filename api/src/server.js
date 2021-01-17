@@ -8,6 +8,7 @@ const app = express()
 
 //Require routes
 const manga = require('./routes/manga')
+const category = require('./routes/categories')
 
 // Use of Middlewares
 app.use(morgan('dev'))
@@ -32,5 +33,6 @@ app.get('/', (req, res) => {
 })
 
 app.use('/manga', manga)
+app.use('/category', category)
 
 module.exports = app
